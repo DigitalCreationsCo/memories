@@ -1,5 +1,6 @@
 import withBundleAnalyzer from '@next/bundle-analyzer';
 import withNextIntl from 'next-intl/plugin';
+import path from 'path';
 
 const withNextIntlConfig = withNextIntl('./src/lib/i18n.ts');
 
@@ -9,6 +10,5 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 export default bundleAnalyzer(
-    withNextIntlConfig({
-    })
+    withNextIntlConfig(),
 );

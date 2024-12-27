@@ -1,19 +1,18 @@
-import { getCookie } from 'cookies-next';
-import type { GetServerSidePropsContext } from 'next';
+"use server"
 
-export const getParsedCookie = (
-  req: GetServerSidePropsContext['req'],
-  res: GetServerSidePropsContext['res']
-): {
+import { cookies } from 'next/headers'
+
+export async function getParsedCookie(): Promise<{
   token: string | null;
   url: string | null;
-} => {
-  const cookie = getCookie('pending-invite', { req, res });
+}> {
+  const cookieStore = cookies()
+  const cookie = cookieStore.get('pending-invite')
 
   return cookie
-    ? JSON.parse(cookie as string)
+    ? JSON.parse(cookie.value)
     : {
         token: null,
         url: null,
       };
-};
+}

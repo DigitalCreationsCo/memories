@@ -35,20 +35,19 @@ echo ""
 
 sleep 2
 # Database Configuration
-echo "Database Configuration (Kickstart Saas only supports MongoDB at the moment.):"
-# db_type=$(prompt_with_default "Enter database type (mysql/postgresql)" "postgresql")
-# db_host=$(prompt_with_default "Enter database host" "localhost")
-# db_port=$(prompt_with_default "Enter database port" "5432")
-# db_name=$(prompt_with_default "Enter database name" "myproject")
-# db_user=$(prompt_with_default "Enter database username" "admin")
-# read -s -p "Enter database password: " db_password
+echo "Database Configuration: (Kickstart Saas only supports PostgreSQL at the moment.)"
+echo "Please create a new Supabase project at: https://supabase.com/dashboard/projects"
+echo ""
+sleep 2
 
-sleep 1
-db_url=$(prompt_with_default "Enter node.js mongodb connection string" "")
+supabase_url=$(prompt_with_default "Enter your Supabase Project URL" "https://your-project-ref.supabase.co")
 echo ""
 
-# db_url="${db_type}://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}"
-update_env_file "DATABASE_URL" "$db_url"
+supabase_anon_key=$(prompt_with_default "Enter your Supabase anon key (public)" "your-anon-key")
+echo ""
+
+update_env_file "NEXT_PUBLIC_SUPABASE_URL" "$supabase_url"
+update_env_file "NEXT_PUBLIC_SUPABASE_ANON_KEY" "$supabase_anon_key"
 
 # Domain Configuration
 echo ""
@@ -56,13 +55,13 @@ echo "Domain Configuration:"
 domain=$(prompt_with_default "Enter your domain URL" "https://example.com")
 update_env_file "NEXT_PUBLIC_APP_URL" "$domain"
 
-# OpenAI API Configuration
-echo ""
-echo "OpenAI API Configuration:"
-echo "To get your OpenAI API key, visit: https://platform.openai.com/account/api-keys"
-read -s -p "Enter your OpenAI API key: " openai_key
-echo ""
-update_env_file "OPENAI_API_KEY" "$openai_key"
+# # OpenAI API Configuration
+# echo ""
+# echo "OpenAI API Configuration:"
+# echo "To get your OpenAI API key, visit: https://platform.openai.com/account/api-keys"
+# read -s -p "Enter your OpenAI API key: " openai_key
+# echo ""
+# update_env_file "OPENAI_API_KEY" "$openai_key"
 
 # Stripe Configuration
 echo ""
@@ -77,6 +76,25 @@ echo ""
 update_env_file "STRIPE_PUBLISHABLE_KEY" "$stripe_pub_key"
 update_env_file "STRIPE_SECRET_KEY" "$stripe_secret_key"
 update_env_file "STRIPE_WEBHOOK_SECRET" "$stripe_webhook_secret"
+
+# Google Gemini AI Configuration
+echo ""
+echo "Google Gemini AI Configuration:"
+echo "Please create a new Google AI API key at: https://aistudio.google.com/apikey"
+echo "Once logged in, click on 'Get API key' to create a new key or use an existing one."
+echo ""
+sleep 2
+
+read -s -p "Enter your Google AI API key: " gemini_key
+echo ""
+update_env_file "GOOGLE_AI_API_KEY" "$gemini_key"
+
+# Generate Auth Secret
+echo ""
+echo "Generating AUTH_SECRET..."
+auth_secret=$(openssl rand -base64 32)
+echo "Generated secure AUTH_SECRET"
+update_env_file "AUTH_SECRET" "$auth_secret"
 
 # Additional configurations can be added here
 

@@ -1,20 +1,19 @@
 import createMiddleware from 'next-intl/middleware';
 import { AllLocales, App } from './lib/App';
-import { NextRequest, NextResponse } from 'next/server';
-import authConfig from "./auth.config"
-import NextAuth from "next-auth"
+import { auth } from "@/auth"
+import { NextResponse } from 'next/server';
 
-// Create the next-intl middleware
 const intlMiddleware = createMiddleware({
     locales: AllLocales,
     localePrefix: App.localePrefix,
     defaultLocale: App.defaultLocale,
 });
 
-const publicPages = ['/', '/signin', '/signup'];
-
-// Create the auth middleware
-const { auth } = NextAuth(authConfig)
+const publicPages = [
+    '/', 
+    '/auth/signin', 
+    '/auth/signup'
+];
 
 // Helper function to check if the path is public
 function isPublicPath(pathname: string) {
@@ -40,7 +39,7 @@ export default async function middleware(request: any) {
     const authResult = await auth(request) as any;
 
     // If auth failed and user is not on signin page, redirect to signin
-    if (!authResult?.auth && pathname !== '/auth/signin') {
+    if (!authResult?.auth && !isPublicPath(pathname)) {
         const signinUrl = new URL('/auth/signin', request.url);
         // Preserve the original URL as next-auth doesn't do this automatically
         signinUrl.searchParams.set('callbackUrl', request.url);

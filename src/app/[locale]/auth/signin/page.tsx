@@ -24,14 +24,13 @@ const Signin = () => {
   const router = useRouter();
   const t = useTranslations('common');
   const { toast } = useToast();
-
-  const env = getEnv()
   
+  let redirectAfterSignIn= ""
   useEffect(() => {
     async function authenticate() {
-      const redirectAfterSignIn = (await env).REDIRECT_AFTER_SIGNIN
+      redirectAfterSignIn = await (await getEnv()).REDIRECT_AFTER_SIGNIN
       if (status === 'authenticated') {
-        router.push(await redirectAfterSignIn);
+        router.push(redirectAfterSignIn);
       }
     }
     authenticate()
@@ -51,8 +50,8 @@ const Signin = () => {
       email,
       password,
       // csrfToken,
-      redirect: false,
-      callbackUrl: redirectAfterSignIn,
+      redirect: true,
+      redirecTo: redirectAfterSignIn,
     });
 
     methods.reset();
