@@ -117,14 +117,6 @@ const Signin = () => {
             </Button>
           </form>
         </Form>
-        <div className="divider"></div>
-        <div className="space-y-3">
-          <Link href="/auth/magic-link">
-            <Button variant="outline" className="w-full">
-              {t('sign-in-with-email')}
-            </Button>
-          </Link>
-        </div>
       </div>
       <p className="text-center text-sm text-gray-600">
         {t('dont-have-an-account')}
