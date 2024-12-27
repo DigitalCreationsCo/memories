@@ -45,21 +45,30 @@ const Signin = () => {
   });
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    const { email, password } = data;
-    const response = await signIn('credentials', {
+    try {
+      const { email, password } = data;
+      const response = await signIn('credentials', {
       email,
       password,
       // csrfToken,
-      redirect: true,
-      redirecTo: redirectAfterSignIn,
+      // redirect: true,
+      // redirecTo: redirectAfterSignIn,
     });
 
+    console.log(`response `, response) 
     methods.reset();
 
     if (!response?.ok) {
       toast({ title: t('signin-error') });
       return;
     }
+  } catch (error: any) {
+    console.error(`sign in onsubmit error `, error)
+    toast({ 
+      title: t('signin-error'),
+      description: error.message
+     });
+  }
   };
 
   return (

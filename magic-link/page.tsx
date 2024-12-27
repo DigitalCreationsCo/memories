@@ -47,12 +47,12 @@ const MagicLink: NextPageWithLayout<
       formik.resetForm();
 
       if (response?.error) {
-        toast.error(t('email-signin-error'));
+        toast.error(t('signin-error'));
         return;
       }
 
       if (response?.status === 200 && response?.ok) {
-        toast.success(t('email-signin-success'));
+        toast.success(t('signin-success'));
         return;
       }
     },

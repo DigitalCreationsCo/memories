@@ -8,8 +8,9 @@ export async function getEnv() {
 }
 
 export async function handleSignIn(provider?: string) {
+  const redirectPath = env.REDIRECT_AFTER_SIGNIN
   await signIn(provider, {
-    redirectTo: env.REDIRECT_AFTER_SIGNIN,
+    redirectTo: redirectPath,
   })
 }
 

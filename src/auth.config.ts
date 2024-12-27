@@ -8,20 +8,32 @@ export const authConfig = {
   providers: [],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      let isLoggedIn = !!auth?.user;
-      let isOnDashboard = nextUrl.pathname.startsWith('/home');
+      try {
+        console.debug(`auth `, auth)
+        console.debug(`nextUrl `, nextUrl)
+        let isLoggedIn = !!auth?.user;
+        let isOnDashboard = nextUrl.pathname.startsWith('/home');
 
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
+        if (isOnDashboard) {
+          if (isLoggedIn) return true;
+          return false;
+        } else if (isLoggedIn) {
+          return Response.redirect(new URL('/home', nextUrl));
+        }
+
+        return true;
+      } catch (error) {
+        console.error(`authorized error `, error)
         return false;
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/home', nextUrl));
       }
-
-      return true;
     },
     async session({ session, user }) {
-      return session;
+      try {
+        return session;
+      } catch (error) {
+        console.error(`session error `, error)
+        return session;
+      }
     },
   },
 } satisfies NextAuthConfig;

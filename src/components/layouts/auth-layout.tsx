@@ -17,7 +17,7 @@ export default function AuthLayout({
       <div className="w-full max-w-md space-y-8">
         <div>
           <img
-            src={App.logoUrl}
+            src="/logo.png"
             className="mx-auto h-12 w-auto"
             alt={App.name}
           />
