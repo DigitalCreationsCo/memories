@@ -1,6 +1,6 @@
 import { AllLocales } from "@/lib/App";
 import { notFound } from "next/navigation";
-import AuthLayout from "@/components/layouts/AuthLayout";
+import AuthLayout from "@/components/layouts/auth-layout";
 
 export default function Layout( props: Readonly<{
   children: React.ReactNode;

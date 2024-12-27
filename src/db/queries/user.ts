@@ -1,11 +1,14 @@
-import { User, CreateUserInput } from "@/db/queries/types"
 import supabase from "../client"
+import { User as BaseUser } from "@supabase/supabase-js"
 
-export class UserError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'UserError'
-  }
+export type User = BaseUser & {
+    password: string;
+}
+
+export type CreateUserInput = {
+    email: string;
+    password: string;
+    name?: string;
 }
 
 export async function getUser(userId: string): Promise<User> {
@@ -84,3 +87,12 @@ export async function deleteUser(userId: string): Promise<void> {
 }
 
 export default supabase
+
+
+export class UserError extends Error {
+    constructor(message: string) {
+      super(message)
+      this.name = 'UserError'
+    }
+  }
+  
