@@ -1,22 +1,16 @@
 "use client"
 
-import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation'
-import useProjects from '@/hooks/use-projects';
+import { useProjects } from '@/hooks/use-projects';
 import { useTranslations } from 'next-intl';
 
 const Projects = () => {
   const t = useTranslations('common');
-  const { status } = useSession();
   const router = useRouter()
 
-  const { projects } = useProjects()
-
-  if (status === 'unauthenticated') {
-    router.push('/auth/signin');
-  }
+  const projects = useProjects()
 
   useEffect(() => {
     if (projects === null) {

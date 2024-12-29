@@ -1,12 +1,6 @@
 "use server"
 import supabase from "../client"
-import { Project, CreateProjectInput } from "@/types/project.types"
-export class ProjectError extends Error {
-    constructor(message: string) {
-      super(message)
-      this.name = 'ProjectError'
-    }
-}
+import { Project, CreateProjectInput, ProjectError } from "@/types/project.types"
 
 export async function getProjects(projectId: string): Promise<Project> {
   try {
@@ -46,12 +40,12 @@ export async function getProject(projectId: string): Promise<Project> {
   }
 }
 
-export async function createProject({ name, description }: CreateProjectInput): Promise<Project> {
+export async function createProject({ name, description, user_id }: CreateProjectInput): Promise<Project> {
   try {
     const client = await supabase()
     const { data, error } = await client
       .from('projects')
-      .insert({ name, description })
+      .insert({ name, description, user_id })
       .select()
       .single()
 

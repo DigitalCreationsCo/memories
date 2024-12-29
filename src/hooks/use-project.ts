@@ -1,21 +1,25 @@
-import fetcher from '@/lib/fetcher';
-import type { Project } from '@/types/project.types';
-import useSWR from 'swr';
-import type { ApiResponse } from '@/types/api';
+import { useQueryFunctionType } from "@/types/api";
+import { api } from "@/controllers/api/api";
+import { getURL } from "@/utils/url.utils";
+import { UseRequestProcessor } from "@/controllers/api/services/request-processor";
+import { Project } from "@/types/project.types";
 
-const useProject = (slug: string | undefined) => {
-  const url = `/api/projects/${slug}`;
+export const useProject  : useQueryFunctionType<string, Project> = (
+  projectId: string,
+  options?: any,
+) => {
+  const { query } = UseRequestProcessor();
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Project>>(
-    slug ? url : null,
-    fetcher
+  const getProjectData = async () => {
+    const response = await api.get<Project>(`${getURL("PROJECT")}/${projectId}`);
+    return response["data"];
+  };
+
+  const queryResult = query(
+    ["useGetProjectData"],
+    getProjectData,
+    options,
   );
 
-  return {
-    isLoading,
-    isError: error,
-    project: data?.data,
-  };
+  return queryResult;
 };
-
-export default useProject;

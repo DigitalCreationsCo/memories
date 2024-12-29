@@ -1142,6 +1142,18 @@
   dependencies:
     "@t3-oss/env-core" "0.11.1"
 
+"@tanstack/query-core@5.62.9":
+  version "5.62.9"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.62.9.tgz#94231ffea5de086b5e6c0f1e527cda5650cb1849"
+  integrity sha512-lwePd8hNYhyQ4nM/iRQ+Wz2cDtspGeZZHFZmCzHJ7mfKXt+9S301fULiY2IR2byJYY6Z03T427E5PoVfMexHjw==
+
+"@tanstack/react-query@^5.62.11":
+  version "5.62.11"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.62.11.tgz#95a615a60dc8fd836a5085dea2739a62f4953f55"
+  integrity sha512-Xb1nw0cYMdtFmwkvH9+y5yYFhXvLRCnXoqlzSw7UkqtCVFq3cG8q+rHZ2Yz1XrC+/ysUaTqbLKJqk95mCgC1oQ==
+  dependencies:
+    "@tanstack/query-core" "5.62.9"
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
@@ -2601,6 +2613,11 @@ fastq@^1.6.0:
   integrity sha512-QKHXPW0hD8g4UET03SdOdunzSouc9N4AuHdsX8XNcTsuz+yYFILVNIX4l9yHABMhiEI9Db0JTTIpu0wB+Y1QQw==
   dependencies:
     reusify "^1.0.4"
+
+fetch-intercept@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/fetch-intercept/-/fetch-intercept-2.4.0.tgz#be8b0f17abaadeea6de52ecdb6e9ed081f03480a"
+  integrity sha512-BPZ2LM9Dh1ua2ovQf03N6rhWg1qxdVD5qK/G4llvcemt6M+jjxCuIDxJ+6IiG+uz//3UQmgfKEv0gOGvYIxZ7g==
 
 file-entry-cache@^6.0.1:
   version "6.0.1"

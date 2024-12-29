@@ -4,14 +4,14 @@ import SideBarButtonsComponent from "@/components/core/sidebar-component";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import ForwardedIconComponent from "@/components/common/generic-icon-component";
 import PageLayout from "@/components/common/page-layout";
-import useProject from "@/hooks/use-project";
-import { useParams, useRouter } from "next/navigation";
+import { useProject } from "@/hooks/use-project";
+import { usePathname,useRouter } from "next/navigation";
 
 export default function ProjectLayout({ children }: { children: React.ReactNode }): JSX.Element {
   const router = useRouter();
-  //   use last section of path as projectId
-    const projectId = useParams().project as string;
-    const { project } = useProject(projectId)!;
+
+    const projectId = usePathname().split('/').pop() as string;
+    const { data: project } = useProject(projectId)
 
   const sidebarNavItems: {
     href?: string;

@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }): JSX.Element {
   return (
     <main className="flex flex-1 overflow-hidden">
-      <div className="flex flex-1 flex-col overflow-x-hidden pt-1">
+      <div className="flex flex-1 flex-col overflow-x-hidden">
         {children}
       </div>
     </main>

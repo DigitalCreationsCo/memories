@@ -14,7 +14,7 @@ export default function PageLayout({
   backTo = "",
 }: {
   title: string;
-  description: string;
+  description?: string;
   children: React.ReactNode;
   button?: React.ReactNode;
   betaIcon?: boolean;
@@ -49,7 +49,7 @@ export default function PageLayout({
                   {betaIcon && <span className="store-beta-icon">Beta</span>}
                 </h2>
               </div>
-              <p className="text-muted-foreground">{description}</p>
+              {description && <p className="text-muted-foreground">{description}</p>}
             </div>
             <div className="flex-shrink-0">{button && button}</div>
           </div>

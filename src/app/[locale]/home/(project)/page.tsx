@@ -12,9 +12,10 @@ const AllProjects = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-3">
         <h4>{t('all-projects')}</h4>
         <Button
+          variant='outline'
           color="primary"
           onClick={() => {
             setVisible(!visible);
