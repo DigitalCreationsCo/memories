@@ -1220,6 +1220,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/lodash@^4.17.13":
+  version "4.17.13"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.13.tgz#786e2d67cfd95e32862143abe7463a7f90c300eb"
+  integrity sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==
+
 "@types/node@*":
   version "22.10.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-22.10.2.tgz#a485426e6d1fdafc7b0d4c7b24e2c78182ddabb9"
@@ -1338,6 +1343,26 @@ acorn@^8.0.4, acorn@^8.11.0, acorn@^8.9.0:
   version "8.14.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.14.0.tgz#063e2c70cac5fb4f6467f0b11152e04c682795b0"
   integrity sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==
+
+ag-charts-types@11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-11.0.3.tgz#a4aa4825b298014c1323a1e5832dec0ef4e5e135"
+  integrity sha512-q7O2viQXPyO014QVH7KjFCUmQ/NvMBx9ReZtramQ44u+/aAa0ttLi/coK+V0Hse4/MG1eB/2XhgymdooQ0Kalg==
+
+ag-grid-community@33.0.3, ag-grid-community@^33.0.3:
+  version "33.0.3"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-33.0.3.tgz#51511d5b048eedf24b3de596967e74a3272bfe88"
+  integrity sha512-HZeVmVieZ5Gm9j09Itecqm+OIX8X6cU4TJToUbsXv3DxdO9SK5/s8aAJAwBHtNRXOhHrhqQYwrY2yc3OtzWwcQ==
+  dependencies:
+    ag-charts-types "11.0.3"
+
+ag-grid-react@^33.0.3:
+  version "33.0.3"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-33.0.3.tgz#24f0c65ba48363e53db915aab13bb537b8e35025"
+  integrity sha512-6IcraSVqsUG/hzTeZ0D0dtddAcZKcWdN75ek/O+lCA6r22abJPe33nHBYVezkTV8k6D3JhA24mlTwduzn0GZLQ==
+  dependencies:
+    ag-grid-community "33.0.3"
+    prop-types "^15.8.1"
 
 ajv@^6.12.4:
   version "6.12.6"

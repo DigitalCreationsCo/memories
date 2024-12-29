@@ -1,15 +1,15 @@
+"use client"
+
 import { ACCESS_TOKEN } from "@/constants/constants";
 import { useCustomApiHeaders } from "@/hooks/use-custom-api-headers";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import * as fetchIntercept from "fetch-intercept";
 import { useEffect } from "react";
 import cookies from "cookies-next";
-import { BuildStatus } from "../../constants/enums";
 import { checkDuplicateRequestAndStoreRequest } from "@/controllers/api/helpers/check-duplicate-requests";
 import { useLogout } from "@/hooks/auth/use-logout";
 import { useRefreshAccessToken } from "@/hooks/auth/use-refresh-access-token";
 
-// Create a new Axios instance
 const api: AxiosInstance = axios.create({
   baseURL: "",
 });

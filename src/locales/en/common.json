@@ -110,6 +110,8 @@
     "api-keys": "API Keys",
     "project": "Project",
     "project-name": "Project Name",
+    "project-description": "Project Description",
+    "create-project-description": "Create a new project.",
     "update-account": "Update Account",
     "update-password": "Update Password",
     "current-password": "Current Password",

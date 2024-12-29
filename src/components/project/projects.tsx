@@ -12,29 +12,30 @@ import { toast } from '@/hooks/use-toast';
 import { Project } from '@/types/project.types';
 import { useEffect, useState } from 'react';
 import { useUser } from '@/hooks/use-user';
-
-const Projects = () => {
-  const user = useUser();
+import { SelectionChangedEvent } from 'ag-grid-community';
+import TableComponent from '../core/table-component';
+import { User } from '@/types/user.types';
+const Projects = ({ user }: { user: User }) => {
   const { isPending, isError, mutateAsync: getProjects } = useProjects();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const t = useTranslations('common');
 
   const getProjectsData = async () => {
     try {
-      if (user.data) {
-        const projects = await getProjects({ user_id: user.data.id })
+      if (user) {
+        const projects = await getProjects({ user_id: user.id })
         if (projects) {
           setProjects(projects)
         }
       }
     } catch (error) {
       console.error(error)
-      return null
     }
   }
   useEffect(() => {
     getProjectsData()
-  }, [user.data?.id, getProjects]);
+  }, [user, getProjects]);
 
   if (isPending) {
     return <Loading />;
@@ -56,10 +57,37 @@ const Projects = () => {
     }
   };
 
+  const keysList = projects.map((project) => ({
+    id: project.id,
+    name: project.name,
+    created_at: project.created_at,
+  }));
+
+  const columnDefs = [
+    { headerName: 'Name', field: 'name' },
+    // { headerName: 'Members', field: 'members' },
+    { headerName: 'Created At', field: 'created_at' },
+    { headerName: 'Actions', field: 'actions' },
+  ]
   return (
-    <Card title="Your Projects">
-      <CardContent>
-        <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">
+    <>
+      <div className="flex h-full w-full flex-col justify-between grow">
+        <TableComponent
+          key={"projects"}
+          onDelete={leaveProject}
+          overlayNoRowsTemplate="No data available"
+          onSelectionChanged={(event: SelectionChangedEvent) => {
+            setSelectedRows(event.api.getSelectedRows().map((row) => row.id));
+          }}
+          rowSelection="multiple"
+          suppressRowClickSelection={true}
+          pagination={true}
+          columnDefs={columnDefs}
+          rowData={keysList}
+        />
+      </div>
+
+        {/* <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -101,9 +129,8 @@ const Projects = () => {
                 );
               })}
           </tbody>
-        </table>
-      </CardContent>
-    </Card>
+        </table> */}
+        </>
   );
 };
 

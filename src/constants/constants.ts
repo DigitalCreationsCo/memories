@@ -1,5 +1,3 @@
-// src/constants/constants.ts
-
 import { languageMap } from "../types/components";
 
 /**

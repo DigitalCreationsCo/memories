@@ -10,8 +10,9 @@ import type { ApiResponse } from '@/types/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { FormInput } from 'lucide-react';
 import { createProject } from '@/db/queries/project';
+import { Input } from '../ui/input';
+import { User } from '@/types/user.types';
 
 const createProjectSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -24,9 +25,11 @@ type CreateProjectFormData = z.infer<typeof createProjectSchema>;
 const CreateProject = ({
   visible,
   setVisible,
+  user,
 }: {
   visible: boolean;
   setVisible: (visible: boolean) => void;
+  user: User;
 }) => {
   const t = useTranslations('common');
   const { mutateAsync } = useProjects();
@@ -37,13 +40,11 @@ const CreateProject = ({
 
   const onSubmit = async (values: CreateProjectFormData) => {
     try {
-      // const { data } = await axios.post<ApiResponse<Project>>('/api/projects/', values);
-
-      const project = await createProject(values);
-
+      console.log(`values `, values);
+      const project = await mutateAsync({...values, user_id: user.id});
+      console.log(`project `, project);
       if (project) {
         toast({ title: t('project-created') });
-        mutateAsync({});
         form.reset();
         setVisible(false);
       }
@@ -53,14 +54,14 @@ const CreateProject = ({
   };
 
   return (  
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} method="POST">
     <Dialog open={visible} onOpenChange={setVisible}>
     <DialogContent>
           <DialogTitle className="font-bold">{t('create-project')}</DialogTitle>
               <DialogDescription>
-                <p>{t('project-description')}</p>
+                <p>{t('create-project-description')}</p>
               </DialogDescription>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} method="POST">
             <div className="mt-2 flex flex-col space-y-4">
               
               <FormField
@@ -70,7 +71,7 @@ const CreateProject = ({
                   <FormItem>
                     <FormLabel>{t('project-name')}</FormLabel>
                     <FormControl>
-                      <FormInput {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,7 +85,7 @@ const CreateProject = ({
                   <FormItem>
                     <FormLabel>{t('project-description')}</FormLabel>
                     <FormControl>
-                      <FormInput {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,10 +108,10 @@ const CreateProject = ({
               {t('close')}
             </Button>
           </DialogFooter>
-        </form>
-      </Form>
     </DialogContent>
     </Dialog>
+        </form>
+      </Form>
   );
 };
 

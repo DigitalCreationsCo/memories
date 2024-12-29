@@ -4,11 +4,12 @@ import { CreateProject, Projects } from '@/components/project';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/hooks/use-user';
 
 const AllProjects = () => {
   const [visible, setVisible] = useState(false);
-
   const t = useTranslations('common');
+  const user = useUser().data
 
   return (
     <>
@@ -24,8 +25,8 @@ const AllProjects = () => {
           {t('create-project')}
         </Button>
       </div>
-      <CreateProject visible={visible} setVisible={setVisible} />
-      <Projects />
+      <CreateProject visible={visible} setVisible={setVisible} user={user!} />
+      <Projects user={user!} />
     </>
   );
 };

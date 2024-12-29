@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/header"
 import { SessionProvider } from "next-auth/react"
 import { Toaster } from "@/components/ui/toaster"
+import QueryClientProvider from "@/components/providers/query-client-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,10 +48,10 @@ export default function RootLayout( props: Readonly<{
 
     // Using internationalization in Client Components
     const messages = useMessages();
-    
   return (
     <html lang={props.params.locale}>
-      <body className={`${inter.className} bg-background text-foreground antialiased`}>
+      <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
+        <QueryClientProvider>
         <SessionProvider>
           <NextIntlClientProvider
             locale={props.params.locale}
@@ -61,6 +62,7 @@ export default function RootLayout( props: Readonly<{
            <Toaster />
           </NextIntlClientProvider>
         </SessionProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
