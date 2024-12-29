@@ -1,5 +1,5 @@
 import fetcher from '@/lib/fetcher';
-import { Invitation } from '@/db/queries/types';
+import { Invitation } from '@/db/queries/invitation';
 import useSWR from 'swr';
 import { ApiResponse } from '@/types/api';
 

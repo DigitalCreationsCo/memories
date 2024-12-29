@@ -39,12 +39,12 @@ export default async function middleware(request: any) {
     const authResult = await auth(request) as any;
 
     // If auth failed and user is not on signin page, redirect to signin
-    if (!authResult?.auth && !isPublicPath(pathname)) {
-        const signinUrl = new URL('/auth/signin', request.url);
-        // Preserve the original URL as next-auth doesn't do this automatically
-        signinUrl.searchParams.set('callbackUrl', request.url);
-        return NextResponse.redirect(signinUrl);
-    }
+    // if (!authResult?.auth && !isPublicPath(pathname)) {
+    //     const signinUrl = new URL('/auth/signin', request.url);
+    //     // Preserve the original URL as next-auth doesn't do this automatically
+    //     signinUrl.searchParams.set('callbackUrl', request.url);
+    //     return NextResponse.redirect(signinUrl);
+    // }
 
     // After auth passes, apply intl middleware
     return intlMiddleware(request);

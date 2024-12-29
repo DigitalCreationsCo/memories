@@ -8,7 +8,7 @@ interface ErrorProps {
 
 const Error = (props: ErrorProps) => {
   const { message } = props;
-  const { t } = useTranslations('common');
+  const t = useTranslations('common');
 
   return (
     <Alert title="error">

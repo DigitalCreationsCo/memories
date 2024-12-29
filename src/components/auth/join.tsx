@@ -26,7 +26,7 @@ const signupSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(7, 'Password must be at least 7 characters'),
-    team: z.string().min(3, 'Team name must be at least 3 characters'),
+    project: z.string().min(3, 'Project name must be at least 3 characters'),
 });
   
 type SignupValues = z.infer<typeof signupSchema>;
@@ -45,7 +45,7 @@ const Join = () => {
         name: '',
         email: '',
         password: '',
-        team: '',
+        project: '',
       },
     });
   
@@ -110,16 +110,16 @@ const Join = () => {
                 )}
               />
               <FormField
-                name="team"
+                name="project"
                 control={methods.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('team')}</FormLabel>
+                    <FormLabel>{t('project')}</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type="text"
-                        placeholder={t('team-name')}
+                        placeholder={t('project-name')}
                       />
                     </FormControl>
                     <FormMessage />

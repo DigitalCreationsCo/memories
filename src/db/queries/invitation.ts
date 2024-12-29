@@ -1,8 +1,8 @@
-import { User } from "./user";
+import { User } from "@/types/user.types";
 
 export type Invitation = {
     id: string;
-    teamId: string;
+    projectId: string;
     email: string;
     role: Role;
     token: string;
@@ -12,5 +12,5 @@ export type Invitation = {
     updatedAt: Date;
   
     user: User;
-    // team: Team;
+    // project: Project;
 }

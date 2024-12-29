@@ -1,15 +1,5 @@
 import supabase from "../client"
-import { User as BaseUser } from "@supabase/supabase-js"
-
-export type User = BaseUser & {
-    password: string;
-}
-
-export type CreateUserInput = {
-    email: string;
-    password: string;
-    name?: string;
-}
+import { User, CreateUserInput } from "@/types/user.types"
 
 export async function getUser(userId: string): Promise<User> {
   try {

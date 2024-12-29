@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useInvitation from '@/hooks/use-invitation';
-import { Loading, Error as ErrorComponent } from '@/components/shared';
+import { Loading, Error as ErrorComponent } from '@/components/common';
 
 const invitationSchema = z.object({
   name: z.string().min(1, 'Name is required'),

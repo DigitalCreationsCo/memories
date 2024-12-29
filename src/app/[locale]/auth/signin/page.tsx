@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const Signin = () => {
   const { status } = useSession();
@@ -25,12 +25,12 @@ const Signin = () => {
   const t = useTranslations('common');
   const { toast } = useToast();
   
-  let redirectAfterSignIn= ""
+  let redirectAfterSignIn= useRef("")
   useEffect(() => {
     async function authenticate() {
-      redirectAfterSignIn = await (await getEnv()).REDIRECT_AFTER_SIGNIN
+      redirectAfterSignIn.current = await (await getEnv()).REDIRECT_AFTER_SIGNIN
       if (status === 'authenticated') {
-        router.push(redirectAfterSignIn);
+        router.push(redirectAfterSignIn.current);
       }
     }
     authenticate()
@@ -50,9 +50,8 @@ const Signin = () => {
       const response = await signIn('credentials', {
       email,
       password,
-      // csrfToken,
-      // redirect: true,
-      // redirecTo: redirectAfterSignIn,
+      redirect: true,
+      redirectTo: redirectAfterSignIn.current,
     });
 
     console.log(`response `, response) 
