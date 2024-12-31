@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const Signin = () => {
   const { status } = useSession();
@@ -25,17 +25,28 @@ const Signin = () => {
   const t = useTranslations('common');
   const { toast } = useToast();
   
-  let redirectAfterSignIn= useRef("")
-  useEffect(() => {
-    async function authenticate() {
-      redirectAfterSignIn.current = await (await getEnv()).REDIRECT_AFTER_SIGNIN
-      if (status === 'authenticated') {
-        router.push(redirectAfterSignIn.current);
-      }
-    }
-    authenticate()
+  const [redirectPath, setRedirectPath] = useState<string>('');
 
-  }, [status])
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const env = await getEnv();
+        setRedirectPath(env?.REDIRECT_AFTER_SIGNIN || '/projects');
+
+        if (status === 'authenticated') {
+          router.push(redirectPath);
+        }
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+        toast({ 
+          title: t('error'),
+          description: 'Failed to initialize authentication'
+        });
+      }
+    };
+
+    initAuth();
+  }, [status, router, toast, t, redirectPath]);
 
   const methods = useForm<{ email: string; password: string }>({
     defaultValues: {
@@ -47,27 +58,39 @@ const Signin = () => {
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       const { email, password } = data;
+      
+      methods.reset();
+      
       const response = await signIn('credentials', {
-      email,
-      password,
-      redirect: true,
-      redirectTo: redirectAfterSignIn.current,
-    });
+        email,
+        password,
+        redirect: false,
+        callbackUrl: redirectPath
+      });
 
-    console.log(`response `, response) 
-    methods.reset();
+      if (!response) {
+        throw new Error('Authentication failed');
+      }
 
-    if (!response?.ok) {
-      toast({ title: t('signin-error') });
-      return;
+      if (response.error) {
+        toast({ 
+          title: t('signin-error'),
+          description: response.error
+        });
+        return;
+      }
+
+      if (response.ok) {
+        router.push(redirectPath);
+      }
+
+    } catch (error: any) {
+      console.error('Sign in error:', error);
+      toast({ 
+        title: t('signin-error'),
+        description: error.message || 'An unexpected error occurred'
+      });
     }
-  } catch (error: any) {
-    console.error(`sign in onsubmit error `, error)
-    toast({ 
-      title: t('signin-error'),
-      description: error.message
-     });
-  }
   };
 
   return (

@@ -30,6 +30,29 @@ function isPublicPath(pathname: string) {
 export default async function middleware(request: any) {
     const pathname = request.nextUrl.pathname;
 
+    // Special handling for API routes
+    // if (pathname.startsWith('/api')) {
+    //     // Check for API credential header
+    //     // console.debug("request", request);
+    //     const apiKey = request.headers.get('x-api-key');
+    //     console.debug("apiKey", apiKey);
+    //     // console.debug('headers', request.headers);
+    //     // Verify the API key matches your expected value
+    //     // Replace 'your-secret-api-key' with your actual secret key
+        
+    //     // if (!apiKey || apiKey !== process.env.API_KEY) {
+    //     //     return new NextResponse(
+    //     //         JSON.stringify({ error: 'Unauthorized' }),
+    //     //         {
+    //     //             status: 401,
+    //     //             headers: { 'Content-Type': 'application/json' }
+    //     //         }
+    //     //     );
+    //     // }
+        
+    //     return NextResponse.next();
+    // }
+
     // Handle public pages with just intl middleware
     if (isPublicPath(pathname)) {
         return intlMiddleware(request);
@@ -51,5 +74,7 @@ export default async function middleware(request: any) {
 }
 
 export const config = {
-    matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+    // matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+
 };

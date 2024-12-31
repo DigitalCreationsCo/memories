@@ -18,7 +18,7 @@ const Projects = () => {
       return;
     }
 
-    router.push(`/home`);
+    router.push(`/projects`);
   });
 
   return (

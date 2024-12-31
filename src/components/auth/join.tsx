@@ -66,7 +66,7 @@ const Join = () => {
   
     const onSubmit = async (data: SignupValues) => {
       try {
-        const response = await fetch('/api/auth/join', {
+        const response = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

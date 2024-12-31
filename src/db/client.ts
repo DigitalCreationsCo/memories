@@ -1,10 +1,14 @@
-import { auth } from "@/auth"
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = async () => {
-  const session = await auth()
-  const { supabaseAccessToken } = session || {}
-  
+// Remove auth dependency, create two client functions
+export function createAnonClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
+
+export function createAuthClient(supabaseAccessToken: string) {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -17,5 +21,3 @@ const supabase = async () => {
     }
   )
 }
-
-export default supabase

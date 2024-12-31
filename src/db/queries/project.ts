@@ -1,10 +1,10 @@
 "use server"
-import supabase from "../client"
+import { createAnonClient } from "../client"
 import { Project, CreateProjectInput, ProjectError } from "@/types/project.types"
 
 export async function getProjects(projectId: string): Promise<Project> {
   try {
-    const client = await supabase()
+    const client = createAnonClient()
     const { data, error } = await client
       .from('projects')
       .select('*')
@@ -23,7 +23,7 @@ export async function getProjects(projectId: string): Promise<Project> {
 
 export async function getProject(projectId: string): Promise<Project> {
   try {
-    const client = await supabase()
+    const client = createAnonClient()
     const { data, error } = await client
       .from('projects')
       .select('*')
@@ -42,7 +42,7 @@ export async function getProject(projectId: string): Promise<Project> {
 
 export async function createProject({ name, description, user_id }: CreateProjectInput): Promise<Project> {
   try {
-    const client = await supabase()
+    const client = createAnonClient()
     const { data, error } = await client
       .from('projects')
       .insert({ name, description, user_id })
@@ -61,7 +61,7 @@ export async function createProject({ name, description, user_id }: CreateProjec
 
 export async function updateProject(projectId: string, projectData: Partial<Project>): Promise<Project> {
   try {
-    const client = await supabase()
+    const client = createAnonClient()
     const { data, error } = await client
       .from('projects')
       .update(projectData)
@@ -81,7 +81,7 @@ export async function updateProject(projectId: string, projectData: Partial<Proj
 
 export async function deleteProject(projectId: string): Promise<void> {
   try {
-    const client = await supabase()
+    const client = createAnonClient()
     const { error } = await client
       .from('projects')
       .delete()
@@ -93,9 +93,3 @@ export async function deleteProject(projectId: string): Promise<void> {
     throw new ProjectError('Failed to delete project')
   }
 }
-
-export default supabase
-
-
-
-  

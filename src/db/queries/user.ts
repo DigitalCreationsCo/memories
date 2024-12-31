@@ -1,9 +1,11 @@
-import supabase from "../client"
-import { User, CreateUserInput } from "@/types/user.types"
+"use server"
+
+import { createAnonClient } from "../client"
+import { User, CreateUserInput, UserError } from "@/types/user.types"
 
 export async function getUser(userId: string): Promise<User> {
   try {
-    const client = await supabase()
+    const client = await createAnonClient()
     const { data, error } = await client
       .from('users')
       .select('*')
@@ -20,9 +22,17 @@ export async function getUser(userId: string): Promise<User> {
   }
 }
 
+export async function getUserByEmail(email: string): Promise<User> {
+  const client = createAnonClient()
+  const { data, error } = await client.from('users').select('*').eq('email', email).single()
+  if (error) throw new UserError(error.message)
+  if (!data) throw new UserError('User not found')
+  return data
+}
+
 export async function createUser({ email, password, ...userData }: CreateUserInput): Promise<User> {
   try {
-    const client = await supabase()
+    const client = await createAnonClient()
     const { data, error } = await client.auth.signUp({
       email,
       password,
@@ -43,7 +53,7 @@ export async function createUser({ email, password, ...userData }: CreateUserInp
 
 export async function updateUser(userId: string, userData: Partial<User>): Promise<User> {
   try {
-    const client = await supabase()
+    const client = await createAnonClient()
     const { data, error } = await client
       .from('users')
       .update(userData)
@@ -63,7 +73,7 @@ export async function updateUser(userId: string, userData: Partial<User>): Promi
 
 export async function deleteUser(userId: string): Promise<void> {
   try {
-    const client = await supabase()
+    const client = await createAnonClient()
     const { error } = await client
       .from('users')
       .delete()
@@ -75,14 +85,3 @@ export async function deleteUser(userId: string): Promise<void> {
     throw new UserError('Failed to delete user')
   }
 }
-
-export default supabase
-
-
-export class UserError extends Error {
-    constructor(message: string) {
-      super(message)
-      this.name = 'UserError'
-    }
-  }
-  

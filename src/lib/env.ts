@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     REDIRECT_AFTER_SIGNIN: z.string().min(1),
+    NEXTAUTH_URL: z.string().min(1),
     AUTH_SECRET: z.string().min(1),
     LOGTAIL_SOURCE_TOKEN: z.string().optional(),
     // CLERK_SECRET_KEY: z.string().min(1),
@@ -20,6 +21,7 @@ export const env = createEnv({
 //   You need to destructure all the keys manually
   runtimeEnv: {
     REDIRECT_AFTER_SIGNIN: process.env.REDIRECT_AFTER_SIGNIN,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN,
     // CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,

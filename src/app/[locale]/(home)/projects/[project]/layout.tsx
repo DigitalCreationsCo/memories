@@ -22,7 +22,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
   sidebarNavItems.push(
     {
       title: "Media",
-      href: `/home/project/${projectId}/media`,
+      href: `/projects/${projectId}/media`,
       icon: (
         <ForwardedIconComponent
           name="Image"
@@ -35,7 +35,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
 
 
   if (!project) {
-    router.push("/home");
+    router.push("/projects");
   }
 
   return (

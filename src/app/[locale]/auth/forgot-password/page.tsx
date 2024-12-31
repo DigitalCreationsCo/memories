@@ -34,7 +34,7 @@ const ForgotPassword = () => {
   });
 
   if (status === 'authenticated') {
-    router.push('/home');
+    router.push('/projects');
   }
 
   const onSubmit = async (values: FormValues) => {

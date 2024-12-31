@@ -102,6 +102,7 @@ function ApiInterceptor() {
 
         const urlIsFromCurrentOrigin = requestUrl.origin === currentOrigin;
         if (urlIsFromCurrentOrigin) {
+          console.log("urlIsFromCurrentOrigin", urlIsFromCurrentOrigin);
           for (const [key, value] of Object.entries(customHeaders)) {
             config.headers[key] = value;
           }

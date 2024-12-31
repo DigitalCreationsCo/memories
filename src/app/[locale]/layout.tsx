@@ -49,22 +49,22 @@ export default function RootLayout( props: Readonly<{
     // Using internationalization in Client Components
     const messages = useMessages();
   return (
-    <html lang={props.params.locale}>
-      <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
-        <QueryClientProvider>
-        <SessionProvider>
-          <NextIntlClientProvider
-            locale={props.params.locale}
-            messages={messages}
-            >
-            <Header />
-           {props.children}
-           <Toaster />
-          </NextIntlClientProvider>
-        </SessionProvider>
-        </QueryClientProvider>
-      </body>
-    </html>
+    <SessionProvider>
+      <QueryClientProvider>
+        <NextIntlClientProvider
+          locale={props.params.locale}
+          messages={messages}
+          >
+          <html lang={props.params.locale}>
+            <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
+              <Header />
+              {props.children}
+              <Toaster />
+            </body>
+          </html>
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
 
