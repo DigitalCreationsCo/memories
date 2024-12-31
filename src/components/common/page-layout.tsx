@@ -25,12 +25,14 @@ export default function PageLayout({
   return (
     <div className="flex w-full flex-1 flex-col justify-between overflow-auto overflow-x-hidden bg-background">
       <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col">
-        <div className="flex flex-col gap-4 p-6 pt-0">
-          <div className="flex w-full items-center justify-between gap-4 space-y-0.5 pb-2 pt-10">
+        <div className="flex flex-col gap-4">
+          <div className="flex w-full items-center justify-between gap-4 space-y-0.5 pb-2 pt-5">
             <div className="flex w-full flex-col">
               <div className="flex items-center gap-2">
                 {backTo && (
                   <Button
+                    variant='ghost'
+                    size='sm'
                     onClick={() => {
                       router.back();
                     }}
@@ -41,15 +43,17 @@ export default function PageLayout({
                     />
                   </Button>
                 )}
-                <h2
-                  className="text-2xl font-bold tracking-tight"
-                  data-testid="mainpage_title"
-                >
-                  {title}
-                  {betaIcon && <span className="store-beta-icon">Beta</span>}
-                </h2>
+                <div>
+                  <h2
+                    className="text-2xl font-bold tracking-tight"
+                    data-testid="mainpage_title"
+                    >
+                    {title}
+                    {betaIcon && <span className="store-beta-icon">Beta</span>}
+                  </h2>
+                  {description && <p className="text-muted-foreground">{description}</p>}
+                </div>
               </div>
-              {description && <p className="text-muted-foreground">{description}</p>}
             </div>
             <div className="flex-shrink-0">{button && button}</div>
           </div>

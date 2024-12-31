@@ -29,7 +29,7 @@ const SideBarButtonsComponent = ({ items }: SideBarButtonsComponentProps) => {
 
   return (
     <Sidebar collapsible={isMobile ? "icon" : "none"} className="border-none">
-      <SidebarContent className="pr-6">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
