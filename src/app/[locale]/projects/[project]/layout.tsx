@@ -12,16 +12,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
   const router = useRouter();
 
     const projectId = usePathname().split('/').pop() as string;
-    // const { data: project } = useProject(projectId)
-
-    const project:Project = {
-      id: '1',
-      name: 'New Project',
-      description: "a anew project",
-      user_id: '1',
-      'created_at': new Date(),
-      updated_at: new Date()
-    }
+    const { data: project } = useProject(projectId)
 
   const sidebarNavItems: {
     href?: string;
@@ -42,10 +33,10 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
     },
     {
       title: "Albums",
-      href: `/projects/${projectId}/`,
+      href: `/projects/${projectId}/albums`,
       icon: (
         <ForwardedIconComponent
-          name="Album"
+          name="Book"
           className="w-4 flex-shrink-0 justify-start stroke-[1.5]"
         />
       ),
@@ -56,13 +47,14 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
 
   if (!project) {
     router.push("/projects");
+    return <></>
   }
 
   return (
     <PageLayout
       backTo={"/"}
-      title={project!.name}
-      description={project!.description}
+      title={project.name}
+      description={project.description}
     >
       <SidebarProvider defaultOpen={false}>
         <SideBarButtonsComponent items={sidebarNavItems} />

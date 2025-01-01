@@ -77,6 +77,29 @@ update_env_file "STRIPE_PUBLISHABLE_KEY" "$stripe_pub_key"
 update_env_file "STRIPE_SECRET_KEY" "$stripe_secret_key"
 update_env_file "STRIPE_WEBHOOK_SECRET" "$stripe_webhook_secret"
 
+# AWS S3 Configuration
+echo ""
+echo "AWS S3 Configuration:"
+echo "To get your AWS credentials, visit: https://console.aws.amazon.com/iam/home#/security_credentials"
+echo "You'll need to create an S3 bucket first at: https://s3.console.aws.amazon.com/s3/home"
+echo ""
+sleep 2
+
+aws_region=$(prompt_with_default "Enter your AWS Region" "us-east-1")
+echo ""
+
+read -s -p "Enter your AWS Access Key ID: " aws_access_key
+echo ""
+read -s -p "Enter your AWS Secret Access Key: " aws_secret_key
+echo ""
+aws_bucket=$(prompt_with_default "Enter your S3 Bucket Name" "your-bucket-name")
+echo ""
+
+update_env_file "AWS_REGION" "$aws_region"
+update_env_file "AWS_ACCESS_KEY_ID" "$aws_access_key"
+update_env_file "AWS_SECRET_ACCESS_KEY" "$aws_secret_key"
+update_env_file "AWS_BUCKET_NAME" "$aws_bucket"
+
 # Google Gemini AI Configuration
 echo ""
 echo "Google Gemini AI Configuration:"

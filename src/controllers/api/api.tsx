@@ -17,7 +17,7 @@ const api: AxiosInstance = axios.create({
 function ApiInterceptor() {
   const { mutate: mutationLogout } = useLogout();
   const { mutate: mutationRenewAccessToken } = useRefreshAccessToken();
-  const isLoginPage = location.pathname.includes("signin");
+  const isLoginPage = typeof window !== 'undefined' ? location.pathname.includes("signin") : false;
   const customHeaders = useCustomApiHeaders();
 
   useEffect(() => {

@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    
+    console.log('body', body)
     // Validate the request body
     if (!body.name || !body.user_id) {
       return NextResponse.json(

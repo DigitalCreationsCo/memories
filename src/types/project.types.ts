@@ -5,6 +5,7 @@ export type Project = {
     created_at: string;
     updated_at: string;
     user_id: string;
+    media_ids: string[];
 }
 
 export type CreateProjectInput = {

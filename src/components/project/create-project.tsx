@@ -30,15 +30,20 @@ const CreateProject = ({
   user: User;
 }) => {
   const t = useTranslations('common');
-  const { mutateAsync } = useProjects();
+  const { mutateAsync } = useProjects().createProject;
 
   const form = useForm<CreateProjectFormData>({
+    defaultValues: {
+      name: '',
+      description: '',
+      user_id: user.id,
+    },
     resolver: zodResolver(createProjectSchema),
   });
 
   const onSubmit = async (values: CreateProjectFormData) => {
     try {
-      const project = await mutateAsync({...values, user_id: user.id});
+      const project = await mutateAsync(values);
       if (project) {
         toast({ title: t('project-created') });
         form.reset();
@@ -54,9 +59,7 @@ const CreateProject = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('create-project')}</DialogTitle>
-            <DialogDescription>
-              <p>{t('create-project-description')}</p>
-            </DialogDescription>
+            <DialogDescription>{t('create-project-description')}</DialogDescription>
           </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} method="POST">

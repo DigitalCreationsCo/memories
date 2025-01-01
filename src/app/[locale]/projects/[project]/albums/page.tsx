@@ -1,17 +1,17 @@
 "use client"
 
-import Media from "@/components/project/media/media";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import Albums from "@/components/project/album/albums";
 
-export default function MediaPage() {
+export default function AlbumsPage() {
     const t = useTranslations('common');
     const [visible, setVisible] = useState(false);
     return (
         <div className="flex flex-col px-5">
              <div className="flex items-start justify-between">
-                <h4 className="font-medium tracking-tight">Media</h4>
+                <h4 className="font-medium tracking-tight">Albums</h4>
                 <Button
                 variant='outline'
                 color="primary"
@@ -19,11 +19,11 @@ export default function MediaPage() {
                     setVisible(!visible);
                 }}
                 >
-                {t('upload-media')}
+                {t('create-album')}
                 </Button>
             </div>
             <div className="flex flex-col pt-4">
-                <Media />
+                <Albums />
             </div>
         </div>
     )

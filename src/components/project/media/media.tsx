@@ -1,28 +1,52 @@
-import { Loading } from "@/components/common";
-import { Suspense } from "react";
-import MediaImageComponent from "./media-image-component";
+import { Suspense } from "react"
+import { Loading, Error as ErrorComponent } from "@/components/common"
+import { useProjectMedia } from "@/hooks/use-project-media"
+import { useParams } from "next/navigation"
+import MediaImageComponent from "./media-image-component"
+import { UploadMedia } from "./upload-media"
+import MediaGrid from "./media-grid-component"
+import MediaItem from "./media-item-component"
 
-const mockImages = [
-    {id: 1, text: 'https://picsum.photos/200/300'},
-    {id: 2, text: 'https://picsum.photos/200/300'},
-    {id: 3, text: 'https://picsum.photos/200/300'},
-    {id: 4, text: 'https://picsum.photos/200/300'},
-    {id: 5, text: 'https://picsum.photos/200/300'},
-]
-// await a timeout
-const asyncImages = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return mockImages
-}
+export default function Media() {
+    const params = useParams()
+    const projectId = params.project as string
+    
+    const { 
+        data, 
+        isPending: isLoading, 
+        error,
+        mutateAsync,
+    } = useProjectMedia(projectId)
 
-export default function Media({ images }: { images: File[] }) {
+    if (isLoading) return <Loading />
+    if (error) return <ErrorComponent message={error.message} />
+
     return (
-        <div className='flex flex-wrap bg-secondary gap-6 p-5'>
-            <Suspense fallback={Array.from({length: 5}).map((_, index) => <Loading key={index} />)}>
-                {asyncImages().then((images) => {
-                    return images.map((image) => <MediaImageComponent image={image} />)
-                })}
-            </Suspense>
-        </div>
+        <MediaGrid>
+            <UploadMedia 
+                projectId={projectId} 
+                onSuccess={(media) => {
+                    mutateAsync({
+                        ...media,
+                        project_id: projectId,
+                    })
+                }}
+            />
+            
+            {data?.media?.map((image) => (
+                <MediaItem key={image.key}>
+                    <Suspense 
+                        fallback={
+                            <div className="w-full h-full bg-gray-200 animate-pulse" />
+                        }
+                    >
+                        <MediaImageComponent 
+                            image={image} 
+                            projectId={projectId} 
+                        />
+                    </Suspense>
+                </MediaItem>
+            ))}
+        </MediaGrid>
     )
 }

@@ -8,6 +8,7 @@ import Header from "@/components/header"
 import { SessionProvider } from "next-auth/react"
 import { Toaster } from "@/components/ui/toaster"
 import QueryClientProvider from "@/components/providers/query-client-provider";
+import { StorageProvider } from "@/components/providers/storage-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,13 +56,15 @@ export default function RootLayout( props: Readonly<{
           locale={props.params.locale}
           messages={messages}
           >
-          <html lang={props.params.locale}>
-            <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
-              <Header />
-              {props.children}
-              <Toaster />
-            </body>
-          </html>
+          <StorageProvider>
+            <html lang={props.params.locale}>
+              <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
+                <Header />
+                {props.children}
+                <Toaster />
+              </body>
+            </html>
+          </StorageProvider>
         </NextIntlClientProvider>
       </QueryClientProvider>
     </SessionProvider>
