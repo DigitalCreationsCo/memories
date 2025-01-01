@@ -77,28 +77,80 @@ update_env_file "STRIPE_PUBLISHABLE_KEY" "$stripe_pub_key"
 update_env_file "STRIPE_SECRET_KEY" "$stripe_secret_key"
 update_env_file "STRIPE_WEBHOOK_SECRET" "$stripe_webhook_secret"
 
-# AWS S3 Configuration
+# Storage Configuration
 echo ""
-echo "AWS S3 Configuration:"
-echo "To get your AWS credentials, visit: https://console.aws.amazon.com/iam/home#/security_credentials"
-echo "You'll need to create an S3 bucket first at: https://s3.console.aws.amazon.com/s3/home"
-echo ""
-sleep 2
-
-aws_region=$(prompt_with_default "Enter your AWS Region" "us-east-1")
+echo "Storage Configuration:"
+echo "Choose your storage provider:"
+echo "1) AWS S3"
+echo "2) Google Cloud Storage"
+read -p "Enter your choice (1 or 2): " storage_choice
 echo ""
 
-read -s -p "Enter your AWS Access Key ID: " aws_access_key
-echo ""
-read -s -p "Enter your AWS Secret Access Key: " aws_secret_key
-echo ""
-aws_bucket=$(prompt_with_default "Enter your S3 Bucket Name" "your-bucket-name")
-echo ""
+# Set the storage provider
+if [ "$storage_choice" = "1" ]; then
+    update_env_file "NEXT_PUBLIC_STORAGE_PROVIDER" "aws"
+    
+    # AWS S3 Configuration
+    echo "AWS S3 Configuration:"
+    echo "To get your AWS credentials, visit: https://console.aws.amazon.com/iam/home#/security_credentials"
+    echo "You'll need to create an S3 bucket first at: https://s3.console.aws.amazon.com/s3/home"
+    echo ""
+    sleep 2
 
-update_env_file "AWS_REGION" "$aws_region"
-update_env_file "AWS_ACCESS_KEY_ID" "$aws_access_key"
-update_env_file "AWS_SECRET_ACCESS_KEY" "$aws_secret_key"
-update_env_file "AWS_BUCKET_NAME" "$aws_bucket"
+    # Server-side AWS variables
+    aws_region=$(prompt_with_default "Enter your AWS Region" "us-east-1")
+    echo ""
+    read -s -p "Enter your AWS Access Key ID: " aws_access_key
+    echo ""
+    read -s -p "Enter your AWS Secret Access Key: " aws_secret_key
+    echo ""
+    aws_bucket=$(prompt_with_default "Enter your S3 Bucket Name" "your-bucket-name")
+    echo ""
+
+    # Update server-side variables
+    update_env_file "AWS_REGION" "$aws_region"
+    update_env_file "AWS_ACCESS_KEY_ID" "$aws_access_key"
+    update_env_file "AWS_SECRET_ACCESS_KEY" "$aws_secret_key"
+    update_env_file "AWS_BUCKET_NAME" "$aws_bucket"
+
+    # Update client-side variables
+    update_env_file "NEXT_PUBLIC_AWS_REGION" "$aws_region"
+    update_env_file "NEXT_PUBLIC_AWS_BUCKET_NAME" "$aws_bucket"
+
+elif [ "$storage_choice" = "2" ]; then
+    update_env_file "NEXT_PUBLIC_STORAGE_PROVIDER" "google"
+    
+    # Google Cloud Storage Configuration
+    echo "Google Cloud Storage Configuration:"
+    echo "To get your Google Cloud credentials, visit: https://console.cloud.google.com/apis/credentials"
+    echo "You'll need to create a bucket first at: https://console.cloud.google.com/storage/browser"
+    echo ""
+    sleep 2
+
+    # Server-side Google Cloud variables
+    gcs_project_id=$(prompt_with_default "Enter your Google Cloud Project ID" "your-project-id")
+    echo ""
+    read -p "Enter your Google Cloud Client Email: " gcs_client_email
+    echo ""
+    echo "Enter your Google Cloud Private Key (paste and press Enter, then Ctrl+D):"
+    gcs_private_key=$(cat)
+    echo ""
+    gcs_bucket=$(prompt_with_default "Enter your Google Cloud Storage Bucket Name" "your-bucket-name")
+    echo ""
+
+    # Update server-side variables
+    update_env_file "GOOGLE_CLOUD_PROJECT_ID" "$gcs_project_id"
+    update_env_file "GOOGLE_CLOUD_CLIENT_EMAIL" "$gcs_client_email"
+    update_env_file "GOOGLE_CLOUD_PRIVATE_KEY" "$gcs_private_key"
+    update_env_file "GOOGLE_CLOUD_BUCKET_NAME" "$gcs_bucket"
+
+    # Update client-side variables
+    update_env_file "NEXT_PUBLIC_GOOGLE_CLOUD_PROJECT_ID" "$gcs_project_id"
+    update_env_file "NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET_NAME" "$gcs_bucket"
+
+else
+    echo "Invalid choice. Skipping storage configuration."
+fi
 
 # Google Gemini AI Configuration
 echo ""

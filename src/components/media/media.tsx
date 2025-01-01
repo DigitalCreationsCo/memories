@@ -6,6 +6,7 @@ import MediaImageComponent from "./media-image-component"
 import { UploadMedia } from "./upload-media"
 import MediaGrid from "./media-grid-component"
 import MediaItem from "./media-item-component"
+import { MediaType } from "@/types/media.types"
 
 export default function Media() {
     const params = useParams()
@@ -25,7 +26,7 @@ export default function Media() {
         <MediaGrid>
             <UploadMedia 
                 projectId={projectId} 
-                onSuccess={(media) => {
+                onSuccess={(media:MediaType) => {
                     mutateAsync({
                         ...media,
                         project_id: projectId,
@@ -33,8 +34,8 @@ export default function Media() {
                 }}
             />
             
-            {data?.media?.map((image) => (
-                <MediaItem key={image.key}>
+            {data?.media?.map((image:MediaType) => (
+                <MediaItem key={image.id}>
                     <Suspense 
                         fallback={
                             <div className="w-full h-full bg-gray-200 animate-pulse" />

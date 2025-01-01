@@ -1,6 +1,6 @@
 "use client"
 
-import Media from "@/components/project/media/media";
+import Media from "@/components/media/media";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { useState } from "react";

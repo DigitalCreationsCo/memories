@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import React from "react"
 import { ImageDialog } from "@/components/common/image-dialog"
-import { deleteMedia } from "@/components/s3/actions"
+import { useStorage } from "@/hooks/use-storage" 
 import { useToast } from "@/hooks/use-toast"
-import { MediaItem } from "@/types/media"
+import { MediaType } from "@/types/media.types"
+import { STORAGE_KEYS } from '@/utils/storage.utils'
+import { useMediaStore } from "@/store/mediaStore"
 
 const LazyImage = ({ src, className }: { src: string, className: string }) => {
     return (
@@ -25,8 +27,11 @@ const LazyImage = ({ src, className }: { src: string, className: string }) => {
     )
 }
 
-export default function MediaImageComponent({ image, projectId }: { image: MediaItem, projectId: string }) {
+export default function MediaImageComponent({ image, projectId }: { image: MediaType, projectId: string }) {
     const { toast } = useToast()
+    const { removeMediaItem } = useMediaStore()
+    const { deleteMedia } = useStorage()
+
     const [isHovered, setIsHovered] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     
@@ -56,9 +61,11 @@ export default function MediaImageComponent({ image, projectId }: { image: Media
     const handleDelete = async () => {
         setIsDeleting(true)
         try {
-            const result = await deleteMedia(image.key, projectId)
+            const result = await deleteMedia(image.id, projectId)
             if (!result.success) throw new Error(result.error)
-            
+                
+            removeMediaItem(image.id)
+
             toast({
                 title: "Success",
                 description: "Media deleted successfully",

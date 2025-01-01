@@ -1,23 +1,24 @@
 import { useParams } from 'next/navigation'
-import { useMediaStore } from '@/store/mediaStore'
+import { useMediaStore } from '@/hooks/use-media-store'
 import { useEffect } from 'react'
 import { Loading, Error as ErrorComponent } from "@/components/common"
 import MediaGrid from "../media/media-grid-component"
 import MediaItem from "../media/media-item-component"
 import MediaImageComponent from "../media/media-image-component"
 import { Suspense } from 'react'
+import { MediaType } from "@/types/media.types"
 
 export function Album({ albumId }: { albumId: string }) {
   const params = useParams()
   const projectId = params.project as string
-  const { albums, isLoading, error, fetchAlbums } = useMediaStore()
+  const { albums, mediaItems, isLoading, error, isInitialized, fetchAlbums } = useMediaStore()
   
   useEffect(() => {
     fetchAlbums(projectId)
   }, [projectId, fetchAlbums])
 
-  if (isLoading) return <Loading />
-  if (error) return <ErrorComponent message={error} />
+  if (!isInitialized || isLoading) return <Loading />
+    if (error) return <ErrorComponent message={error} />
 
   const album = albums[projectId]?.find(a => a.id === albumId)
   if (!album) return <ErrorComponent message="Album not found" />
@@ -30,18 +31,23 @@ export function Album({ albumId }: { albumId: string }) {
       </div>
 
       <MediaGrid>
-        {album.media_ids?.map((mediaId) => (
-          <MediaItem key={mediaId}>
-            <Suspense fallback={
-              <div className="w-full h-full bg-gray-200 animate-pulse" />
-            }>
-              <MediaImageComponent 
-                image={{ key: mediaId }} 
-                projectId={projectId}
-              />
-            </Suspense>
-          </MediaItem>
-        ))}
+        {album.media_ids?.map((mediaId) => {
+          const mediaItem = mediaItems[mediaId] as MediaType
+          if (!mediaItem) return null
+          
+          return (
+            <MediaItem key={mediaId}>
+              <Suspense fallback={
+                <div className="w-full h-full bg-gray-200 animate-pulse" />
+              }>
+                <MediaImageComponent 
+                  image={mediaItem} 
+                  projectId={projectId}
+                />
+              </Suspense>
+            </MediaItem>
+          )
+        })}
       </MediaGrid>
 
       {(!album.media_ids || album.media_ids.length === 0) && (

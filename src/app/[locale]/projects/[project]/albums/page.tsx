@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import Albums from "@/components/project/album/albums";
+import Albums from "@/components/album/albums";
 
 export default function AlbumsPage() {
     const t = useTranslations('common');

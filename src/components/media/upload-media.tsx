@@ -1,46 +1,47 @@
-import { uploadMedia } from "@/components/s3/actions";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
 import { ForwardedIconComponent } from "@/components/common/generic-icon-component";
+import { useStorage } from "@/hooks/use-storage";
+import { STORAGE_KEYS } from '@/utils/storage.utils'
+import { useMediaStore } from "@/hooks/use-media-store";
 
 interface UploadMediaProps {
     projectId: string;
-    onSuccess?: (media: any) => void;
+    onSuccess?: (media: any[]) => void;
 }
 
 export function UploadMedia({ projectId, onSuccess }: UploadMediaProps) {
+    const { addMediaItems } = useMediaStore()
     const { toast } = useToast();
-    const [isUploading, setIsUploading] = useState(false);
+    const { uploadFiles, isUploading } = useStorage();
 
     const handleUpload = async (files: FileList) => {
-        setIsUploading(true);
-        const formData = new FormData();
-        formData.append('projectId', projectId);
-        
         try {
-            for (const file of files) {
-                formData.set('file', file);
-                const result = await uploadMedia(formData);
-                
-                if (!result.success) {
-                    throw new Error(result.error);
-                }
-            }
+            const fileArray = Array.from(files);
+            const urls = await uploadFiles(fileArray, projectId);
             
+            const newMediaItems = urls.map((url, index) => ({
+                id: crypto.randomUUID(),
+                url,
+                type: fileArray[index].type,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                project_id: projectId
+            }))
+            
+            addMediaItems(newMediaItems)
+
             toast({
                 title: "Success",
                 description: `${files.length} file${files.length > 1 ? 's' : ''} uploaded successfully`,
             });
             
-            onSuccess?.();
+            onSuccess?.(newMediaItems);
         } catch (error) {
             toast({
                 title: "Error",
                 description: "Failed to upload media",
                 variant: "destructive",
             });
-        } finally {
-            setIsUploading(false);
         }
     };
 

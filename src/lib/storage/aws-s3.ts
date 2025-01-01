@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { StorageClient } from './storage-client';
+import { StorageClient } from '../../types/storage.types';
 
 export class S3Service extends StorageClient {
     private s3Client: S3Client;
