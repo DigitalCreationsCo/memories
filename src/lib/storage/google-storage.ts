@@ -1,13 +1,30 @@
 import { StorageClient } from '../../types/storage.types';
 import { Storage } from '@google-cloud/storage';
 
+interface StorageApiResponse {
+    url: string;
+    files?: Array<{
+        Key: string;
+        LastModified: string;
+        Size: number;
+        ETag: string;
+    }>;
+}
+
+class StorageError extends Error {
+    constructor(message: string, public readonly code?: string) {
+        super(message);
+        this.name = 'StorageError';
+    }
+}
+
 export class GoogleStorageService extends StorageClient {
-    private storage: Storage;
+    private storage: Storage | null = null;
     private bucket: string;
 
     constructor() {
         super();
-        // Only initialize if we're on the server side
+        // Only initialize Google Storage on server side
         if (typeof window === 'undefined') {
             this.storage = new Storage({
                 projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
@@ -18,8 +35,7 @@ export class GoogleStorageService extends StorageClient {
             });
             this.bucket = process.env.GOOGLE_CLOUD_BUCKET_NAME!;
         } else {
-            // Client-side placeholder
-            this.storage = {} as Storage;
+            // Client-side: don't initialize Storage, just set bucket name
             this.bucket = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_BUCKET_NAME!;
         }
     }
@@ -51,12 +67,14 @@ export class GoogleStorageService extends StorageClient {
                 // Get download URL
                 return await this.getSignedUrl(key);
             } catch (error) {
-                console.error('Error uploading file:', error);
-                throw error;
+                throw new StorageError(
+                    'Failed to upload file',
+                    error instanceof Error ? error.message : 'Unknown error'
+                );
             }
         } else {
             // Server-side implementation
-            const bucket = this.storage.bucket(this.bucket);
+            const bucket = this.storage!.bucket(this.bucket);
             const blob = bucket.file(key);
             
             try {
@@ -65,8 +83,10 @@ export class GoogleStorageService extends StorageClient {
                 });
                 return await this.getSignedUrl(key);
             } catch (error) {
-                console.error('Error uploading file:', error);
-                throw error;
+                throw new StorageError(
+                    'Failed to upload file',
+                    error instanceof Error ? error.message : 'Unknown error'
+                );
             }
         }
     }
@@ -87,7 +107,7 @@ export class GoogleStorageService extends StorageClient {
             return url;
         } else {
             // Server-side implementation
-            const bucket = this.storage.bucket(this.bucket);
+            const bucket = this.storage!.bucket(this.bucket);
             const blob = bucket.file(key);
             const [url] = await blob.getSignedUrl({
                 version: 'v4',
@@ -111,7 +131,7 @@ export class GoogleStorageService extends StorageClient {
             });
         } else {
             // Server-side implementation
-            const bucket = this.storage.bucket(this.bucket);
+            const bucket = this.storage!.bucket(this.bucket);
             const blob = bucket.file(key);
             await blob.delete();
         }
@@ -132,7 +152,7 @@ export class GoogleStorageService extends StorageClient {
             return files;
         } else {
             // Server-side implementation
-            const bucket = this.storage.bucket(this.bucket);
+            const bucket = this.storage!.bucket(this.bucket);
             const [files] = await bucket.getFiles({ prefix });
             return files.map(file => ({
                 Key: file.name,

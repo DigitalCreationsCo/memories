@@ -2,19 +2,18 @@ import { createProject, getProject } from "@/db/queries/project";
 import { createUser, getUserByEmail } from "@/db/queries/user";
 import { hashPassword } from "@/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, email, password, project } = req.body;
+export const POST = async (req: NextRequest) => {
+  const { name, email, password, project } = await req.json()
 
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    return res.status(400).json({
-      error: {
-        message:
-          'An user with this email already exists or the email was invalid.',
-      },
-    });
+    return NextResponse.json(
+      { error: 'An user with this email already exists or the email was invalid.' }, 
+      { status: 400 }
+    );
   }
 
   // Create a new team
@@ -23,11 +22,10 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
     const nameCollisions = await getProject(project);
 
     if (nameCollisions) {
-      return res.status(400).json({
-        error: {
-          message: 'A project with this name already exists in our database.',
-        },
-      });
+      return NextResponse.json(
+        { error: 'A project with this name already exists in our database.' },
+        { status: 400 }
+      );
     }
   }
 
@@ -47,5 +45,5 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
     // await sendWelcomeEmail(name, email, project);
   }
 
-  return res.status(201).json({ data: user });
+  return NextResponse.json(user,{ status: 201 });
 };

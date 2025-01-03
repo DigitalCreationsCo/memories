@@ -30,3 +30,10 @@ export interface AlbumsResponse {
     data?: Album[];
     error?: string;
 }
+
+export class AlbumError extends Error {
+    constructor(message: string) {
+        super(message)
+        this.name = 'AlbumError'
+    }
+}

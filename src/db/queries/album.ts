@@ -1,13 +1,7 @@
 "use server"
-import { createAnonClient } from "../client"
-import { Album, CreateAlbumInput, UpdateAlbumInput } from "@/types/album.types"
 
-export class AlbumError extends Error {
-    constructor(message: string) {
-        super(message)
-        this.name = 'AlbumError'
-    }
-}
+import { createAnonClient } from "../client"
+import { Album, AlbumError, CreateAlbumInput, UpdateAlbumInput } from "@/types/album.types"
 
 export async function getAlbums(projectId: string): Promise<Album[]> {
     try {

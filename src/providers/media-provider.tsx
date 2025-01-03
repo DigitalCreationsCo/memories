@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect } from 'react'
-import { useMediaStore } from '@/store/mediaStore'
+import { useMediaStore } from '@/hooks/use-media-store'
 import { useParams } from 'next/navigation'
 
 interface MediaProviderProps {

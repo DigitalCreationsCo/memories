@@ -1,6 +1,7 @@
-import { useMediaStore } from "@/store/mediaStore"
+import { useMediaStore } from "@/hooks/use-media-store"
 import { useEffect } from "react"
 import { Album, CreateAlbumInput, UpdateAlbumInput } from "@/types/album.types"
+import { createAlbum, updateAlbum, deleteAlbum } from "@/db/queries/album"
 
 export function useAlbums(projectId: string) {
     const { 
@@ -8,9 +9,6 @@ export function useAlbums(projectId: string) {
         isLoading,
         error,
         fetchAlbums,
-        createAlbum,
-        updateAlbum,
-        deleteAlbum 
     } = useMediaStore()
 
     // Fetch albums on mount or projectId change
@@ -37,7 +35,7 @@ export function useAlbums(projectId: string) {
         return success
     }
 
-    const getAlbum = (albumId: string): Album | undefined => {
+    const getAlbum = (albumId: string) => {
         return projectAlbums.find(album => album.id === albumId)
     }
 

@@ -5,11 +5,14 @@ import MediaImageComponent from "../media/media-image-component"
 import MediaGrid from "../media/media-grid-component"
 import MediaItem from "../media/media-item-component"
 import { useAlbums } from "@/hooks/use-albums"
+import { useMediaStore } from "@/hooks/use-media-store"
 
 export default function Albums() {
     const params = useParams()
     const projectId = params.project as string
     const { albums, isLoading, error, isEmpty } = useAlbums(projectId)
+    const { mediaItems } = useMediaStore()
+
 
     if (isLoading) return <Loading />
     if (error) return <ErrorComponent message={error} />
@@ -24,7 +27,7 @@ export default function Albums() {
                     }>
                         {album.media_ids?.[0] && (
                             <MediaImageComponent 
-                                image={{ key: album.media_ids[0] }} 
+                                image={mediaItems[album.media_ids[0]]} 
                                 projectId={projectId}
                             />
                         )}

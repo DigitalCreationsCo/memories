@@ -57,7 +57,6 @@ export default function RootLayout( props: Readonly<{
           locale={props.params.locale}
           messages={messages}
           >
-          <StorageProvider>
             <MediaProvider>
               <html lang={props.params.locale}>
                 <body className={`${inter.className} bg-background text-foreground antialiased h-screen`}>
@@ -67,7 +66,6 @@ export default function RootLayout( props: Readonly<{
                 </body>
               </html>
             </MediaProvider>
-          </StorageProvider>
         </NextIntlClientProvider>
       </QueryClientProvider>
     </SessionProvider>

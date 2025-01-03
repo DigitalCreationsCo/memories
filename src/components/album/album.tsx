@@ -11,13 +11,13 @@ import { MediaType } from "@/types/media.types"
 export function Album({ albumId }: { albumId: string }) {
   const params = useParams()
   const projectId = params.project as string
-  const { albums, mediaItems, isLoading, error, isInitialized, fetchAlbums } = useMediaStore()
+  const { items: mediaItems, isLoading, error, isInitialized, fetchAlbums } = useMediaStore()
   
   useEffect(() => {
     fetchAlbums(projectId)
   }, [projectId, fetchAlbums])
 
-  if (!isInitialized || isLoading) return <Loading />
+  if (!isLoading) return <Loading />
     if (error) return <ErrorComponent message={error} />
 
   const album = albums[projectId]?.find(a => a.id === albumId)

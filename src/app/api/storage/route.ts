@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
                         files: files.map(f => ({
                             key: f.name,
                             lastModified: f.metadata.updated,
-                            size: parseInt(f.metadata.size),
+                            size: parseInt(f.metadata.size!.toString()),
                             etag: f.metadata.etag,
                         }))
                     });

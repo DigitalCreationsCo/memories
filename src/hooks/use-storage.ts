@@ -1,16 +1,16 @@
-import { StorageContext } from "@/providers/storage-provider";
+// import { StorageContext } from "@/providers/storage-provider";
 import { useState } from "react";
 
-import { useContext } from "react";
+// import { useContext } from "react";
 import { STORAGE_KEYS } from '@/utils/storage.utils'
 
 export function useStorage() {
     const [isUploading, setIsUploading] = useState(false);
     
-  const context = useContext(StorageContext);
-  if (!context) {
-    throw new Error('useStorage must be used within a StorageProvider');
-  }
+  // const context = useContext(StorageContext);
+  // if (!context) {
+  //   throw new Error('useStorage must be used within a StorageProvider');
+  // }
 
   const uploadFile = async (file: File, key: string): Promise<string> => {
     try {
